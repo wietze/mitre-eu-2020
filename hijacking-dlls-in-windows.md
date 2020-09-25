@@ -16,7 +16,7 @@ title-colour: one
 
 
 <br /><br />
-Keep in touch!
+Keep in touch:
 
 ![social](img/twitter.svg) [\@Wietze](https://www.twitter.com/wietze)
 
@@ -138,9 +138,28 @@ Ocean Lotus/APT32 embedded the legitimate `system32\` executable `rekeywiz.exe` 
 
 * Nearly 300 (!) `system32\` executables are vulnerable to this [[5]]
 
+* Many, many more outside this dir, as well as non-Microsoft (see Hexacorn et al.)
+
 * Can be combined with UAC bypass techniques
 
-![](img/blog.png){.center }
+
+![](img/procmon.png){.center}
+
+# Types
+## 6: Relative path DLL Hijacking (3)
+> "Copy (and optionally rename) the legitimate application to a user-writeable folder, alongside the evil DLL."
+
+This poses a problem:
+
+  * Relies on legitimate executables
+  * Many possible candidates
+  * Actively used in the wild
+  * Impact is medium to high
+
+So how to prevent / detect this?
+
+
+![](img/blog.png){.split}
 
 
 # 🧭 Prevention & Detection
@@ -152,7 +171,7 @@ Ocean Lotus/APT32 embedded the legitimate `system32\` executable `rekeywiz.exe` 
 +=================================+=================================+
 |  Use absolute DLL paths         |  Use  |
 |   where possible<br />          |   `PreferSystem32Images` |
-|      _e.g. `/system32`          |  and `MicrosoftSignedOnly`|
+|      _e.g. `system32\`          |  and `MicrosoftSignedOnly`|
 |     DLLs, environment           |   /`StoreSignedOnly` |
 |     variables if needed_        |   process mitigations? |
 |                                 | [[6]] |
