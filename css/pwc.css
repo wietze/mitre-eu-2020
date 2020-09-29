@@ -107,7 +107,6 @@ sup {
     line-height: 0;
 }
 
-
 div.slide {
     padding: 0px !important;
     padding: 0 40px !important;
@@ -115,10 +114,10 @@ div.slide {
     overflow-y: hidden;
 }
 
+
 /* div.slide > * {
     padding-left: 40px !important;
 } */
-
 
 div.slide h1 {
     font-size: 3vw;
@@ -128,6 +127,7 @@ div.slide h1 {
     padding-top: 1em;
     color: black;
 }
+
 div.slide h1.emphasis {
     background-color: #EB8C00;
     color: white;
@@ -149,6 +149,7 @@ div.slide h2 {
     font-size: 2.3vw;
     margin-bottom: 2em;
 }
+
 div.slide h2.epmhasis {
     color: white;
 }
@@ -158,18 +159,22 @@ div.slide h3 {
     margin: 0px;
 }
 
-div.slide h3.emphasis, h3.emphasis+* {
+div.slide h3.emphasis,
+h3.emphasis+* {
     color: white;
     background-color: #EB8C00;
     margin: 0px;
     padding: 10px;
 }
+
 div.slide h3.emphasis+ul {
     padding-left: 40px;
 }
 
+
 /* Banner */
-div.slide>h1+p:only-of-type:nth-last-child(3) {
+
+div.slide>h1+p:only-of-type:nth-last-child(4) {
     text-align: center;
     font-size: 3vw !important;
     position: absolute;
@@ -181,11 +186,26 @@ div.slide>h1+p:only-of-type:nth-last-child(3) {
     color: white;
     color: black;
     padding: 5% 0;
-
 }
 
+div.slide>h1+p:only-of-type:nth-last-child(4) {
+    text-align: center;
+    font-size: 3vw !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    background: #EB8C00;
+    color: white;
+    color: black;
+    padding: 5% 0;
+}
+
+
 /* Section divider */
-div.slide>h1:only-of-type:nth-last-child(3) {
+
+div.slide>h1:only-of-type:nth-last-child(4) {
     background: #333;
     position: absolute;
     top: 0;
@@ -202,8 +222,10 @@ div.slide>h1:only-of-type:nth-last-child(3) {
     font-size: 5vw;
 }
 
+
 /* Video */
-div.slide>video:only-of-type:nth-last-child(3) {
+
+div.slide>video:only-of-type:nth-last-child(4) {
     position: absolute;
     top: 20%;
     bottom: 0;
@@ -212,6 +234,7 @@ div.slide>video:only-of-type:nth-last-child(3) {
     width: 100%;
     height: calc(100% - 20%);
 }
+
 
 /* Title page */
 
@@ -273,7 +296,6 @@ div.slide>video:only-of-type:nth-last-child(3) {
     margin: 0px;
 }
 
-
 #pwc-logo {
     margin-left: 30px;
     position: absolute;
@@ -286,6 +308,7 @@ div.slide>video:only-of-type:nth-last-child(3) {
 
 #pwc-logo>img {
     width: auto;
+    max-width: auto;
     height: 100%;
 }
 
@@ -297,8 +320,12 @@ div.slide>video:only-of-type:nth-last-child(3) {
 }
 
 @keyframes animatedBackground {
-    from { background-position: 0 0; }
-    to { background-position: 100% 0; }
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 100% 0;
+    }
 }
 
 .titlepage>.bg {
@@ -308,7 +335,7 @@ div.slide>video:only-of-type:nth-last-child(3) {
     background-size: cover; */
     width: 100%;
     height: 150%;
-    transform: translate(-00%,-30%) rotate(-25deg);
+    transform: translate(-0%, -30%) rotate(-25deg);
     animation: animatedBackground 20s linear infinite;
     z-index: -1;
     position: absolute;
@@ -321,6 +348,7 @@ div.slide>video:only-of-type:nth-last-child(3) {
 .titlepage>h1 {
     width: 50%;
 }
+
 
 /* Final page */
 
@@ -351,6 +379,7 @@ div.slide.finalpage>h1 {
     width: 50%;
 }
 
+
 /* Split page images */
 
 .split {
@@ -366,7 +395,13 @@ div.slide.finalpage>h1 {
     object-position: 0% 0%;
 }
 
+
 /* Full width images */
+
+img {
+    max-width: 100%;
+}
+
 img.full-width {
     height: 100%;
     object-fit: contain;
@@ -374,7 +409,7 @@ img.full-width {
     left: 0;
     right: 0;
     top: 0;
-    width:100%;
+    width: 100%;
 }
 
 img.full-width-title {
@@ -384,7 +419,7 @@ img.full-width-title {
     left: 0;
     right: 0;
     top: 20%;
-    width:100%;
+    width: 100%;
 }
 
 img.full-width+figcaption,
@@ -397,17 +432,32 @@ img.full-width-title+figcaption {
     font-style: italic;
 }
 
+img[alt=social] {
+    width: 48px;
+    vertical-align: middle;
+}
 
-img[alt=social] { width: 48px; vertical-align: middle; }
-
-blockquote { background: #eee;
+blockquote {
+    background: #eee;
     padding: 10px;
-    margin: 0px; }
+    margin: 0px;
+}
 
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
 
-    .center {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80%;
-    }
+.footer {
+    position: absolute;
+    display: flex;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1vw;
+    line-height: 1.1em;
+    padding: 5px 15px;
+    justify-content: space-between;
+}
