@@ -28,7 +28,7 @@ Keep in touch:
 
 # What's in a name?
 
-![_](img/diag.svg){.full-width-title}
+![_](img/name.png){.full-width-title}
 
 
 
@@ -37,17 +37,21 @@ Keep in touch:
 "Tricking a legitimate/trusted application into loading an arbitrary DLL"
 
 # DLL Hijacking (2)
-- **T1574** : Hijack Execution Flow
+- **T1574**: Hijack Execution Flow
   - **T1574.001**: DLL Search Order Hijacking
   - **T1574.002**: DLL Side-Loading
 
 
-<br /><br />
+![](img/attack.png)
+
+# DLL Hijacking (3)
 But why?
 
 - Your evil code, executed by a trusted executable
 - Great for Execution, Persistence, Privilege Escalation
 - The threat is real
+
+
 
 
 # Types{.emphasis}
@@ -171,7 +175,7 @@ So how to prevent / detect this?
 +=================================+=================================+
 |  Use absolute DLL paths         |  Use  |
 |   where possible<br />          |   `PreferSystem32Images` |
-|      _e.g. `system32\`          |  and `MicrosoftSignedOnly`|
+|      _e.g. _`system32\`_        |  and `MicrosoftSignedOnly`|
 |     DLLs, environment           |   /`StoreSignedOnly` |
 |     variables if needed_        |   process mitigations? |
 |                                 | [[6]] |
@@ -190,7 +194,7 @@ So how to prevent / detect this?
 
 A few (flawed) ideas:
 
-- Look for known DLL hijack targets (DLL names, executables) [[7]]
+- Look for known DLL hijack targets (DLL names, executables) - see [[7]]
 - Look for creation of DLLs by unexpected processes
 - Look for common targets (e.g. Microsoft-signed executables) in unexpected locations
 - Look for common targets loading DLLs not on VT
@@ -199,11 +203,15 @@ A few (flawed) ideas:
 ![](img/sigma.png){.split}
 
 # Detecting DLL Hijacking (2)
+## ... but not impossible
 * 🔎 Instead of just looking for the DLL Injection, look for the **behaviour that follows**
 
 * 📚 **Layer your defences**!
 
 * 🛡️ Ensure a **broad base** of behavioural rules, hunting techniques, anomaly detection
+
+    * You're never going to detect everything
+    * The more you monitor, the less likely an intrusion will go undetected
 
 
 
