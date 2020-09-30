@@ -129,7 +129,7 @@ Vault7 leaks: Kaspersky process `avp.exe` intended to load `WHEAPGRD.DLL`. Due t
 * Combine with other techniques for more impact, e.g. UAC bypass
 
 ### Example{.emphasis}
-Ocean Lotus/APT32 embedded the legitimate `system32\` executable `rekeywiz.exe` alongside an evil `duser.dll` in one of their phishing documents. After unpacking, the trusted `rekeywiz.exe` would load the malicious `duser.dll` which would start phase 2 of the attack [[3], [4]].  _Execution_!
+PwC Threat Intelligence observed a dropper ('xStart') used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) `winword.exe` that is put alongside a malicious alongside a malicious `wwlib.dll`. When the renamed `winword.exe` is executed, `wwlib.dll` is triggered, starting phase 2 of the attack [[3]]. _Execution_!
 
 
 
@@ -140,7 +140,7 @@ Ocean Lotus/APT32 embedded the legitimate `system32\` executable `rekeywiz.exe` 
 ## 6: Relative path DLL Hijacking (2)
 > "Copy (and optionally rename) the legitimate application to a user-writeable folder, alongside the evil DLL."
 
-* Nearly 300 (!) `system32\` executables are vulnerable to this [[5]]
+* Nearly 300 (!) `system32\` executables are vulnerable to this [[4]]
 
 * Many, many more outside this dir, as well as non-Microsoft (see Hexacorn et al.)
 
@@ -178,7 +178,7 @@ So how to prevent / detect this?
 |      _e.g. _`system32\`_        |  and `MicrosoftSignedOnly`|
 |     DLLs, environment           |   /`StoreSignedOnly` |
 |     variables if needed_        |   process mitigations? |
-|                                 | [[6]] |
+|                                 | [[5]] |
 +---------------------------------+------+
 |  Verify validity of DLL<br />   |  |
 |     _i.e. check expected        | |
@@ -194,7 +194,7 @@ So how to prevent / detect this?
 
 A few (flawed) ideas:
 
-- Look for known DLL hijack targets (DLL names, executables) - see [[7]]
+- Look for known DLL hijack targets (DLL names, executables) - see [[6]]
 - Look for creation of DLLs by unexpected processes
 - Look for common targets (e.g. Microsoft-signed executables) in unexpected locations
 - Look for common targets loading DLLs not on VT
@@ -217,8 +217,7 @@ A few (flawed) ideas:
 
 [1]: https://wikileaks.org/ciav7p1/cms/page_27492385.html
 [2]: https://wikileaks.org/ciav7p1/cms/page_3375327.html
-[3]: https://twitter.com/0xCARNAGE/status/1203882560176218113
-[4]: https://any.run/report/f08ccc040c8d8db60f30a6d1026aa6523e97c6cf52b1b30f083a830a0a65a3a9/3abfc241-3ab0-4016-acbb-040b44199d52
-[5]: https://wietze.github.io/blog/hijacking-dlls-in-windows
-[6]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute
-[7]: https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml
+[3]: https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html
+[4]: https://wietze.github.io/blog/hijacking-dlls-in-windows
+[5]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute
+[6]: https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml

@@ -172,7 +172,7 @@ Wietze Beukema
 <li>Combine with other techniques for more impact, e.g. UAC bypass</li>
 </ul>
 <h3 id="example-3" class="emphasis">Example</h3>
-<p>Ocean Lotus/APT32 embedded the legitimate <code>system32\</code> executable <code>rekeywiz.exe</code> alongside an evil <code>duser.dll</code> in one of their phishing documents. After unpacking, the trusted <code>rekeywiz.exe</code> would load the malicious <code>duser.dll</code> which would start phase 2 of the attack [<a href="https://twitter.com/0xCARNAGE/status/1203882560176218113">3</a>, <a href="https://any.run/report/f08ccc040c8d8db60f30a6d1026aa6523e97c6cf52b1b30f083a830a0a65a3a9/3abfc241-3ab0-4016-acbb-040b44199d52">4</a>]. <em>Execution</em>!</p>
+<p>PwC Threat Intelligence observed a dropper (‘xStart’) used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) <code>winword.exe</code> that is put alongside a malicious alongside a malicious <code>wwlib.dll</code>. When the renamed <code>winword.exe</code> is executed, <code>wwlib.dll</code> is triggered, starting phase 2 of the attack [<a href="https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html">3</a>]. <em>Execution</em>!</p>
 <p><img src="img/vt.png" class="split" /></p>
 </div>
 <h1 id="types-7">Types</h1>
@@ -181,7 +181,7 @@ Wietze Beukema
 <p>“Copy (and optionally rename) the legitimate application to a user-writeable folder, alongside the evil DLL.”</p>
 </blockquote>
 <ul>
-<li><p>Nearly 300 (!) <code>system32\</code> executables are vulnerable to this [<a href="https://wietze.github.io/blog/hijacking-dlls-in-windows">5</a>]</p></li>
+<li><p>Nearly 300 (!) <code>system32\</code> executables are vulnerable to this [<a href="https://wietze.github.io/blog/hijacking-dlls-in-windows">4</a>]</p></li>
 <li><p>Many, many more outside this dir, as well as non-Microsoft (see Hexacorn et al.)</p></li>
 <li><p>Can be combined with UAC bypass techniques</p></li>
 </ul>
@@ -216,7 +216,7 @@ Wietze Beukema
 <tbody>
 <tr class="odd">
 <td>Use absolute DLL paths where possible<br /> <em>e.g. </em><code>system32\</code><em> DLLs, environment variables if needed</em></td>
-<td>Use <code>PreferSystem32Images</code> and <code>MicrosoftSignedOnly</code> /<code>StoreSignedOnly</code> process mitigations? [<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute">6</a>]</td>
+<td>Use <code>PreferSystem32Images</code> and <code>MicrosoftSignedOnly</code> /<code>StoreSignedOnly</code> process mitigations? [<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute">5</a>]</td>
 </tr>
 <tr class="even">
 <td>Verify validity of DLL<br /> <em>i.e. check expected signature</em></td>
@@ -230,7 +230,7 @@ Wietze Beukema
 <h2 id="its-not-straightforward">It’s not straightforward…</h2>
 <p>A few (flawed) ideas:</p>
 <ul>
-<li>Look for known DLL hijack targets (DLL names, executables) - see [<a href="https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml">7</a>]</li>
+<li>Look for known DLL hijack targets (DLL names, executables) - see [<a href="https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml">6</a>]</li>
 <li>Look for creation of DLLs by unexpected processes</li>
 <li>Look for common targets (e.g. Microsoft-signed executables) in unexpected locations</li>
 <li>Look for common targets loading DLLs not on VT</li>
