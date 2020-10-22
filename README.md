@@ -4,7 +4,7 @@
 This repository contains a talk on DLL Hijacking as presented to the EU MITRE ATT&CK® Community on 23 October 2020.
 
 ### Presentation
-**Slides**: [HTML](https://wietze.github.io/eu-mitre-2020/) <img src="https://wietze.github.io/img/html.svg" alt="HTML" width="19"/> and [PDF](https://wietze.github.io/eu-mitre-2020/slides.pdf) <img src="https://wietze.github.io/img/pdf.svg" alt="PDF" width="19"/>
+**Slides**: [HTML](https://wietze.github.io/mitre-eu-2020/) <img src="https://wietze.github.io/img/html.svg" alt="HTML" width="19"/> and [PDF](https://wietze.github.io/mitre-eu-2020/slides.pdf) <img src="https://wietze.github.io/img/pdf.svg" alt="PDF" width="19"/>
 
 **Video**: this presentation has not been recorded.
 
