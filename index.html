@@ -49,12 +49,12 @@ Wietze Beukema
 <p><img src="img/github.svg" alt="social" /> <a href="https://github.com/wietze">github.com/wietze</a></p>
 <p><img src="img/email.svg" alt="social" /> <a href="mailto:wietze.beukema@pwc.com">wietze.beukema@pwc.com</a></p>
 <h1 id="dll-hijacking">👾 DLL Hijacking</h1>
+<h1 id="dll-hijacking-1">DLL Hijacking</h1>
+<p>“Tricking a legitimate/trusted application into loading an arbitrary DLL”</p>
 <h1 id="whats-in-a-name">What’s in a name?</h1>
 <figure>
 <img src="img/name.png" alt="_" class="full-width-title" /><figcaption>_</figcaption>
 </figure>
-<h1 id="dll-hijacking-1">DLL Hijacking</h1>
-<p>“Tricking a legitimate/trusted application into loading an arbitrary DLL”</p>
 <h1 id="dll-hijacking-2">DLL Hijacking (2)</h1>
 <ul>
 <li><strong>T1574</strong>: Hijack Execution Flow
@@ -62,6 +62,8 @@ Wietze Beukema
 <li><strong>T1574.001</strong>: DLL Search Order Hijacking</li>
 <li><strong>T1574.002</strong>: DLL Side-Loading</li>
 </ul></li>
+<li><strong>T1218</strong>: Signed Binary Proxy Execution (?)</li>
+<li><strong>T1036</strong>: Masquerading</li>
 </ul>
 <p><img src="img/attack.png" /></p>
 <h1 id="dll-hijacking-3">DLL Hijacking (3)</h1>
@@ -119,12 +121,13 @@ Wietze Beukema
 <ul>
 <li>Most basic type</li>
 <li>Could run DLL with high integrity (although replacement usually requires this too)</li>
+<li>Often used together with DLL Proxying [<a href="https://kevinalmansa.github.io/application%20security/DLL-Proxying/">1</a>].</li>
 </ul>
 <h3 id="example" class="emphasis">Example</h3>
-<p>Copy <code>evil.dll</code> to <code>c:\windows\system32\propsys.dll</code>, replacing the existing DLL. Now run <code>c:\windows\system32\netplwiz.exe</code>. <em>Execution</em>!</p>
+<p>Stuxnet: renamed legitimate Siemens DLL <code>S7OTBXDX.DLL</code> in <code>c:\windows\</code> and added its own malicious version, implementing all exports but with modified logic when interacting with the PLC [<a href="https://www.trendmicro.com/vinfo/de/threat-encyclopedia/web-attack/54/stuxnet-malware-targets-scada-systems">2</a>]. <em>Execution</em> + <em>Persistence</em>!</p>
 <p><img src="img/dll.png" class="split" /></p>
 <h1 id="types-2">Types</h1>
-<h2 id="dll-search-order-hijacking">2: DLL search order hijacking</h2>
+<h2 id="dll-search-order-hijacking-t1574.001">2: DLL search order hijacking (T1574.001)</h2>
 <blockquote>
 <p>“Place the evil DLL in a location that is searched for before the legitimate DLL.”</p>
 </blockquote>
@@ -134,7 +137,7 @@ Wietze Beukema
 <li>Good way to find these: look for <code>FILE NOT FOUND</code> in Procmon</li>
 </ul>
 <h3 id="example-1" class="emphasis">Example</h3>
-<p>Vault7 Leaks: portable Chrome tries to load <code>DWrite.dll</code>, located in <code>System32\</code>. Because no absolute path is specified, the directory of the application is tried first [<a href="https://wikileaks.org/ciav7p1/cms/page_27492385.html">1</a>]. <em>Execution</em> + <em>Persistence</em>!</p>
+<p>Vault7 Leaks: portable Chrome tries to load <code>DWrite.dll</code>, located in <code>System32\</code>. Because no absolute path is specified, the directory of the application is tried first [<a href="https://wikileaks.org/ciav7p1/cms/page_27492385.html">3</a>]. <em>Execution</em> (+ <em>Persistence</em>)!</p>
 <h1 id="types-3">Types</h1>
 <h2 id="phantom-dll-hijacking">3: Phantom DLL Hijacking</h2>
 <blockquote>
@@ -146,20 +149,21 @@ Wietze Beukema
 <li>CVE potential</li>
 </ul>
 <h3 id="example-2" class="emphasis">Example</h3>
-<p>Vault7 leaks: Kaspersky process <code>avp.exe</code> intended to load <code>WHEAPGRD.DLL</code>. Due to a bug, it would prepend the drive letter, meaning it would try to load non-existing file <code>CWHEAPGRD.DLL</code> [<a href="https://wikileaks.org/ciav7p1/cms/page_3375327.html">2</a>]. <em>Execution</em> + <em>Persistence</em>!</p>
+<p>Vault7 leaks: Kaspersky process <code>avp.exe</code> intended to load <code>WHEAPGRD.DLL</code>. Due to a bug, it would prepend the drive letter, meaning it would try to load non-existing file <code>CWHEAPGRD.DLL</code> [<a href="https://wikileaks.org/ciav7p1/cms/page_3375327.html">4</a>]. <em>Execution</em> + <em>Persistence</em> (+ <em>Elevation?</em>)</p>
 <h1 id="types-4">Types</h1>
 <h2 id="dll-redirection">4: DLL redirection</h2>
 <blockquote>
 <p>“Change the location in which the DLL is searched for, by editing %PATH% or .exe.manifest / .exe.local.”</p>
 </blockquote>
 <h1 id="types-5">Types</h1>
-<h2 id="winsxs-dll-replacement">5: WinSxS DLL replacement</h2>
+<h2 id="winsxs-dll-replacement-t1574.002">5: WinSxS DLL replacement (T1574.002)</h2>
 <blockquote>
 <p>“Replace the legitimate with the evil DLL in the relevant WinSxS folder of the targeted DLL.”</p>
 </blockquote>
 <ul>
-<li>Sometimes referred to as ‘DLL Side-Loading’</li>
+<li>Sometimes referred to as ‘DLL Side-Loading’ [<a href="https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-dll-sideloading.pdf">5</a>]</li>
 </ul>
+<p><img src="img/sideloading.png" /></p>
 <h1 id="types-6">Types</h1>
 <h2 id="relative-path-dll-hijacking">6: Relative path DLL Hijacking</h2>
 <blockquote>
@@ -172,7 +176,7 @@ Wietze Beukema
 <li>Combine with other techniques for more impact, e.g. UAC bypass</li>
 </ul>
 <h3 id="example-3" class="emphasis">Example</h3>
-<p>PwC Threat Intelligence observed a dropper (‘xStart’) used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) <code>winword.exe</code> that is put alongside a malicious alongside a malicious <code>wwlib.dll</code>. When the renamed <code>winword.exe</code> is executed, <code>wwlib.dll</code> is triggered, starting phase 2 of the attack [<a href="https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html">3</a>]. <em>Execution</em>!</p>
+<p>PwC Threat Intelligence observed a dropper (‘xStart’) used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) <code>winword.exe</code> that is put alongside a malicious alongside a malicious <code>wwlib.dll</code>. When the renamed <code>winword.exe</code> is executed, <code>wwlib.dll</code> is triggered, starting phase 2 of the attack [<a href="https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html">6</a>]. <em>Execution</em>!</p>
 <p><img src="img/vt.png" class="split" /></p>
 </div>
 <h1 id="types-7">Types</h1>
@@ -181,7 +185,7 @@ Wietze Beukema
 <p>“Copy (and optionally rename) the legitimate application to a user-writeable folder, alongside the evil DLL.”</p>
 </blockquote>
 <ul>
-<li><p>Nearly 300 (!) <code>system32\</code> executables are vulnerable to this [<a href="https://wietze.github.io/blog/hijacking-dlls-in-windows">4</a>]</p></li>
+<li><p>Nearly 300 (!) <code>system32\</code> executables are vulnerable to this [<a href="https://wietze.github.io/blog/hijacking-dlls-in-windows">7</a>]</p></li>
 <li><p>Many, many more outside this dir, as well as non-Microsoft (see Hexacorn et al.)</p></li>
 <li><p>Can be combined with UAC bypass techniques</p></li>
 </ul>
@@ -216,7 +220,7 @@ Wietze Beukema
 <tbody>
 <tr class="odd">
 <td>Use absolute DLL paths where possible<br /> <em>e.g. </em><code>system32\</code><em> DLLs, environment variables if needed</em></td>
-<td>Use <code>PreferSystem32Images</code> and <code>MicrosoftSignedOnly</code> /<code>StoreSignedOnly</code> process mitigations? [<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute">5</a>]</td>
+<td>Use <code>PreferSystem32Images</code> and <code>MicrosoftSignedOnly</code> /<code>StoreSignedOnly</code> process mitigations? [<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute">8</a>]</td>
 </tr>
 <tr class="even">
 <td>Verify validity of DLL<br /> <em>i.e. check expected signature</em></td>
@@ -230,7 +234,7 @@ Wietze Beukema
 <h2 id="its-not-straightforward">It’s not straightforward…</h2>
 <p>A few (flawed) ideas:</p>
 <ul>
-<li>Look for known DLL hijack targets (DLL names, executables) - see [<a href="https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml">6</a>]</li>
+<li>Look for known DLL hijack targets (DLL names, executables) - see [<a href="https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml">9</a>]</li>
 <li>Look for creation of DLLs by unexpected processes</li>
 <li>Look for common targets (e.g. Microsoft-signed executables) in unexpected locations</li>
 <li>Look for common targets loading DLLs not on VT</li>
@@ -240,7 +244,7 @@ Wietze Beukema
 <h1 id="detecting-dll-hijacking-2">Detecting DLL Hijacking (2)</h1>
 <h2 id="but-not-impossible">… but not impossible</h2>
 <ul>
-<li><p>🔎 Instead of just looking for the DLL Injection, look for the <strong>behaviour that follows</strong></p></li>
+<li><p>🔎 Instead of just looking for the DLL Hijacking, look for the <strong>behaviour that follows</strong></p></li>
 <li><p>📚 <strong>Layer your defences</strong>!</p></li>
 <li><p>🛡️ Ensure a <strong>broad base</strong> of behavioural rules, hunting techniques, anomaly detection</p>
 <ul>

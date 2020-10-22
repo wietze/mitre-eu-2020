@@ -307,9 +307,8 @@ div.slide>video:only-of-type:nth-last-child(4) {
 }
 
 #pwc-logo>img {
-    width: auto;
-    max-width: auto;
     height: 100%;
+    max-width: inherit;
 }
 
 .titlepage {

@@ -26,20 +26,21 @@ Keep in touch:
 
 # 👾 DLL Hijacking
 
+# DLL Hijacking
+
+"Tricking a legitimate/trusted application into loading an arbitrary DLL"
+
 # What's in a name?
 
 ![_](img/name.png){.full-width-title}
 
 
-
-# DLL Hijacking
-
-"Tricking a legitimate/trusted application into loading an arbitrary DLL"
-
 # DLL Hijacking (2)
 - **T1574**: Hijack Execution Flow
   - **T1574.001**: DLL Search Order Hijacking
   - **T1574.002**: DLL Side-Loading
+- **T1218**: Signed Binary Proxy Execution (?)
+- **T1036**: Masquerading
 
 
 ![](img/attack.png)
@@ -74,15 +75,15 @@ But why?
 
 * Most basic type
 * Could run DLL with high integrity (although replacement usually requires this too)
+* Often used together with DLL Proxying [[1]].
 
 ### Example{.emphasis}
-
-Copy `evil.dll` to `c:\windows\system32\propsys.dll`, replacing the existing DLL. Now run `c:\windows\system32\netplwiz.exe`. _Execution_!
+Stuxnet: renamed legitimate Siemens DLL `S7OTBXDX.DLL` in `c:\windows\` and added its own malicious version, implementing all exports but with modified logic when interacting with the PLC [[2]].  _Execution_ + _Persistence_!
 
 ![](img/dll.png){.split}
 
 # Types
-## 2: DLL search order hijacking
+## 2: DLL search order hijacking (T1574.001)
 
 > "Place the evil DLL in a location that is searched for before the legitimate DLL."
 
@@ -91,7 +92,7 @@ Copy `evil.dll` to `c:\windows\system32\propsys.dll`, replacing the existing DLL
 * Good way to find these: look for `FILE NOT FOUND` in Procmon
 
 ### Example{.emphasis}
-Vault7 Leaks: portable Chrome tries to load `DWrite.dll`, located in `System32\`. Because no absolute path is specified, the directory of the application is tried first [[1]]. _Execution_ + _Persistence_!
+Vault7 Leaks: portable Chrome tries to load `DWrite.dll`, located in `System32\`. Because no absolute path is specified, the directory of the application is tried first [[3]]. _Execution_ (+ _Persistence_)!
 
 
 # Types
@@ -105,17 +106,19 @@ Vault7 Leaks: portable Chrome tries to load `DWrite.dll`, located in `System32\`
 
 ### Example{.emphasis}
 
-Vault7 leaks: Kaspersky process `avp.exe` intended to load `WHEAPGRD.DLL`. Due to a bug, it would prepend the drive letter, meaning it would try to load non-existing file `CWHEAPGRD.DLL` [[2]]. _Execution_ + _Persistence_!
+Vault7 leaks: Kaspersky process `avp.exe` intended to load `WHEAPGRD.DLL`. Due to a bug, it would prepend the drive letter, meaning it would try to load non-existing file `CWHEAPGRD.DLL` [[4]]. _Execution_ + _Persistence_ (+ _Elevation?_)
 
 # Types
 ## 4: DLL redirection
 > "Change the location in which the DLL is searched for, by editing %PATH% or .exe.manifest / .exe.local."
 
 # Types
-## 5: WinSxS DLL replacement
+## 5: WinSxS DLL replacement (T1574.002)
 > "Replace the legitimate with the evil DLL in the relevant WinSxS folder of the targeted DLL."
 
-* Sometimes referred to as 'DLL Side-Loading'
+* Sometimes referred to as 'DLL Side-Loading' [[5]]
+
+![](img/sideloading.png)
 
 
 # Types
@@ -129,7 +132,7 @@ Vault7 leaks: Kaspersky process `avp.exe` intended to load `WHEAPGRD.DLL`. Due t
 * Combine with other techniques for more impact, e.g. UAC bypass
 
 ### Example{.emphasis}
-PwC Threat Intelligence observed a dropper ('xStart') used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) `winword.exe` that is put alongside a malicious alongside a malicious `wwlib.dll`. When the renamed `winword.exe` is executed, `wwlib.dll` is triggered, starting phase 2 of the attack [[3]]. _Execution_!
+PwC Threat Intelligence observed a dropper ('xStart') used by a threat actor targetting Chinese organisations to deliver Cobalt Strike payloads. Through phishing, a user is tricked into opening a legitimate (but renamed) `winword.exe` that is put alongside a malicious alongside a malicious `wwlib.dll`. When the renamed `winword.exe` is executed, `wwlib.dll` is triggered, starting phase 2 of the attack [[6]]. _Execution_!
 
 
 
@@ -140,7 +143,7 @@ PwC Threat Intelligence observed a dropper ('xStart') used by a threat actor tar
 ## 6: Relative path DLL Hijacking (2)
 > "Copy (and optionally rename) the legitimate application to a user-writeable folder, alongside the evil DLL."
 
-* Nearly 300 (!) `system32\` executables are vulnerable to this [[4]]
+* Nearly 300 (!) `system32\` executables are vulnerable to this [[7]]
 
 * Many, many more outside this dir, as well as non-Microsoft (see Hexacorn et al.)
 
@@ -178,9 +181,9 @@ So how to prevent / detect this?
 |      _e.g. _`system32\`_        |  and `MicrosoftSignedOnly`|
 |     DLLs, environment           |   /`StoreSignedOnly` |
 |     variables if needed_        |   process mitigations? |
-|                                 | [[5]] |
+|                                 | [[8]] |
 +---------------------------------+------+
-|  Verify validity of DLL<br />   |  |
+|  Verify validity of DLL<br />   | |
 |     _i.e. check expected        | |
 |     signature_                  | |
 +--+--+
@@ -194,7 +197,7 @@ So how to prevent / detect this?
 
 A few (flawed) ideas:
 
-- Look for known DLL hijack targets (DLL names, executables) - see [[6]]
+- Look for known DLL hijack targets (DLL names, executables) - see [[9]]
 - Look for creation of DLLs by unexpected processes
 - Look for common targets (e.g. Microsoft-signed executables) in unexpected locations
 - Look for common targets loading DLLs not on VT
@@ -204,7 +207,7 @@ A few (flawed) ideas:
 
 # Detecting DLL Hijacking (2)
 ## ... but not impossible
-* 🔎 Instead of just looking for the DLL Injection, look for the **behaviour that follows**
+* 🔎 Instead of just looking for the DLL Hijacking, look for the **behaviour that follows**
 
 * 📚 **Layer your defences**!
 
@@ -214,10 +217,12 @@ A few (flawed) ideas:
     * The more you monitor, the less likely an intrusion will go undetected
 
 
-
-[1]: https://wikileaks.org/ciav7p1/cms/page_27492385.html
-[2]: https://wikileaks.org/ciav7p1/cms/page_3375327.html
-[3]: https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html
-[4]: https://wietze.github.io/blog/hijacking-dlls-in-windows
-[5]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute
-[6]: https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml
+[1]: https://kevinalmansa.github.io/application%20security/DLL-Proxying/
+[2]: https://www.trendmicro.com/vinfo/de/threat-encyclopedia/web-attack/54/stuxnet-malware-targets-scada-systems
+[3]: https://wikileaks.org/ciav7p1/cms/page_27492385.html
+[4]: https://wikileaks.org/ciav7p1/cms/page_3375327.html
+[5]: https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-dll-sideloading.pdf
+[6]: https://www.pwc.co.uk/issues/cyber-security-services/cyber-threat-intelligence.html
+[7]: https://wietze.github.io/blog/hijacking-dlls-in-windows
+[8]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute
+[9]: https://github.com/wietze/windows-dll-hijacking/blob/master/possible_windows_dll_hijacking.yml
