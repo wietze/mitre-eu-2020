@@ -23,7 +23,14 @@
    href="css/pwc.css" />
 <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script type="text/javascript" defer>jQuery( document ).ready(function() { function x (){ jQuery("div.slide:has(p > img.split)").attr("style", "padding-right: calc(40% + 40px) !important"); if(jQuery("div.slide>div.footer").length==0){ jQuery("div.slide").not(".finalpage").not(".titlepage").append("<div class='footer'><div>@Wietze<br />October 2020</div><div><img src='img/pwc.png' alt='PwC' style='height: 3em;'></div></div>"); } jQuery("div.toolbar").not(".hidden").addClass("hidden");} x(); window.setTimeout( x, 500 ); });</script>
+<script type="text/javascript">jQuery(function() {
+  function onLoad (){
+    jQuery("div.slide:has(p > img.split)").attr("style", "padding-right: calc(40% + 40px) !important");
+    if(jQuery("div.slide>div.footer").length==0){
+      jQuery("div.slide").not(".finalpage").not(".titlepage").append("<div class='footer'><div>@Wietze<br />October 2020</div><div><img src='img/pwc.png' alt='PwC' style='height: 3em;'></div></div>"); }
+      jQuery("div.toolbar").not(".hidden").addClass("hidden");
+      }
+      onLoad(); });</script>
 </head>
 <body>
 <div class="slide titlepage  one ">
