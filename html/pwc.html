@@ -47,7 +47,7 @@ $for(header-includes)$
 $endfor$
 <script src="$slidy-url$/scripts/slidy.js" charset="utf-8" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script type="text/javascript">jQuery(function() {
+<script type="text/javascript">window.addEventListener('load', function(){
   function onLoad (){
     jQuery("div.slide:has(p > img.split)").attr("style", "padding-right: calc(40% + 40px) !important");
     if(jQuery("div.slide>div.footer").length==0){
