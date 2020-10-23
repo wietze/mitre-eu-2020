@@ -46,7 +46,7 @@ Keep in touch:
 ![](img/attack.png)
 
 # DLL Hijacking (3)
-But why?
+## But why?
 
 - Your evil code, executed by a trusted executable
 - Great for Execution, Persistence, Privilege Escalation
